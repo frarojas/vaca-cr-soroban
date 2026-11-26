@@ -68,7 +68,24 @@ Las pruebas incluidas en [`contracts/vaca_cr/src/test.rs`](./contracts/vaca_cr/s
 2. **`test_refund_when_deadline_expires_without_goal`**: verifica que no se pueda pedir reembolso antes del plazo, avanza el reloj del ledger (`env.ledger().set_timestamp(...)`), valida que tras vencer el plazo no entren más aportes ni se pueda reclamar, y comprueba que cada participante recupere su aporte exacto sin poder cobrar dos veces.
 3. **`test_rejects_invalid_amounts_and_requires_auth`**: valida el rechazo de montos `<= 0` y confirma mediante `env.auths()` que `contribute` exige la firma del contribuyente.
 
-### Compilar a Wasm y desplegar en Stellar Testnet (opcional)
+### Compilar a Wasm y desplegar en Stellar Testnet
+
+#### Contrato desplegado y funcional en Testnet
+
+- **Contract ID:** `CCBJUJLCPRXPZOUXHHYSVXX3WGCD3YG7DA3JT2U7GOECLOXV65LZBQ2N`
+- **Explorar en Stellar Lab:** https://lab.stellar.org/r/testnet/contract/CCBJUJLCPRXPZOUXHHYSVXX3WGCD3YG7DA3JT2U7GOECLOXV65LZBQ2N
+- **Transacción de despliegue:** [`f526f6a9dd7954a790badd40243b7933f2bfe4618d811fa29151e8b0253f1665`](https://stellar.expert/explorer/testnet/tx/f526f6a9dd7954a790badd40243b7933f2bfe4618d811fa29151e8b0253f1665)
+- **Aporte de prueba en vivo (1 XLM):** [`7e96d2de9fa0c036523356812e66a8dbadcb7edbb87dd6ba3a38a7864902d583`](https://stellar.expert/explorer/testnet/tx/7e96d2de9fa0c036523356812e66a8dbadcb7edbb87dd6ba3a38a7864902d583)
+
+```bash
+# Consultar el estado actual del contrato desplegado en Testnet
+stellar contract invoke \
+  --id CCBJUJLCPRXPZOUXHHYSVXX3WGCD3YG7DA3JT2U7GOECLOXV65LZBQ2N \
+  --network testnet \
+  -- get_status
+```
+
+#### Cómo compilar y desplegar una nueva instancia
 
 ```bash
 # Compilar contrato optimizado (.wasm)
@@ -82,8 +99,8 @@ stellar contract deploy \
   -- \
   --organizer TU_CUENTA \
   --beneficiary DIRECCION_BENEFICIARIO \
-  --token TOKEN_ID_TESTNET \
+  --token CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC \
   --title "Mejenga del Sabado" \
-  --goal 1000000000 \
-  --deadline 1796000000
+  --goal 100000000 \
+  --deadline 1798200000
 ```
