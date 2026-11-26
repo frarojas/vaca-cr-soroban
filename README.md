@@ -1,7 +1,8 @@
 # VacaCR · Colecta Transparente en Stellar (Soroban)
 
 **Autor:** Franco Vinicio Rojas Lagos  
-**Red:** Stellar / Soroban (Rust `soroban-sdk`)
+**Red:** Stellar / Soroban Testnet (Rust `soroban-sdk`)  
+**Demo en vivo:** https://frarojas.github.io/vaca-cr-soroban/
 
 ---
 
@@ -25,7 +26,7 @@ Esto lo hace un caso ideal para un contrato inteligente en **Stellar (Soroban)**
 
 ## 3. Cómo funciona el contrato (`VacaCrContract`)
 
-El contrato está escrito en Rust (`#![no_std]`) usando `soroban-sdk` en [`contracts/vaca_cr/src/lib.rs`](./contracts/vaca_cr/src/lib.rs) y opera sobre cualquier token SEP-41 en Stellar (por ejemplo, XLM o USDC).
+El contrato está escrito en Rust (`#![no_std]`) usando `soroban-sdk` en [`contracts/vaca_cr/src/lib.rs`](./contracts/vaca_cr/src/lib.rs) y opera sobre cualquier token SEP-41 en Stellar (por ejemplo, XLM nativo vía SAC).
 
 ### Flujo de estados (Multi-Vaca)
 
@@ -47,62 +48,90 @@ El contrato está escrito en Rust (`#![no_std]`) usando `soroban-sdk` en [`contr
 
 ### Decisiones técnicas aplicadas
 
-- **Almacenamiento separado:** configuración global y totales en `instance()`, y aportes por persona en `persistent()` con llaves granulares `Contribution(Address)` y `extend_ttl` en cada escritura.
-- **Errores tipados (`#[contracterror]`):** `InvalidGoal`, `InvalidDeadline`, `InvalidAmount`, `DeadlinePassed`, `DeadlineNotReached`, `GoalNotReached`, `GoalAlreadyReached`, `AlreadyClaimed`, `NothingToRefund`, `NotInitialized`, `Overflow`.
+- **Almacenamiento separado:** contador global en `instance()`, y cada vaca + aportes por usuario en `persistent()` con llaves granulares (`Vaca(u64)`, `TotalRaised(u64)`, `Claimed(u64)`, `Contribution(u64, Address)`) y `extend_ttl` en cada escritura.
+- **Errores tipados (`#[contracterror]`):** `InvalidGoal`, `InvalidDeadline`, `InvalidAmount`, `DeadlinePassed`, `DeadlineNotReached`, `GoalNotReached`, `GoalAlreadyReached`, `AlreadyClaimed`, `NothingToRefund`, `VacaNotFound`, `Overflow`.
 - **Seguridad:** verificación explícita con `require_auth()`, validación de montos positivos y actualización de estado antes de ejecutar transferencias externas.
 
-## 4. Cómo correrlo y probarlo
+---
 
-### Requisitos
-- **Rust + Cargo** (instalado con `rustup`)
-- Opcional para compilar a WebAssembly y desplegar en Testnet: target `wasm32v1-none` y `stellar-cli`
+## 4. Cómo usarlo (desde la aplicación web)
 
-### Ejecutar las pruebas unitarias
+Puedes usar **VacaCR** directamente en **https://frarojas.github.io/vaca-cr-soroban/** sin instalar nada en tu computadora.
+
+### Requisitos previos
+- Tener una wallet compatible con **Stellar Testnet** (por ejemplo **Freighter / Varial**, **xBull** o **Albedo**).
+- Cambiar la red de tu wallet a **Testnet** *(nota: la extensión de LOBSTR solo firma transacciones en Mainnet, por lo que para Testnet se recomienda Freighter, xBull o Albedo)*.
+
+### Pasos de uso
+1. **Explorar colectas activas:** Al abrir la página, la sección **Colectas Activas** consulta en vivo el contrato en Soroban Testnet y muestra el progreso de cada vaca sin necesidad de conectar wallet.
+2. **Conectar tu wallet:** Haz clic en **"Conectar Wallet"** y selecciona tu wallet en el selector.
+3. **Fondear tu cuenta en Testnet (si es nueva):** Si tu dirección aún no tiene saldo en Testnet, aparecerá el botón **"Fondear cuenta con Friendbot"** para recibir `10,000 XLM` de prueba gratis.
+4. **Crear una vaca nueva:** Haz clic en **"Crear nueva vaca"**, completa el nombre, la dirección del beneficiario (`G…`), la meta en XLM y los días de plazo, y firma la transacción en tu wallet.
+5. **Aportar a una vaca:** En cualquier vaca abierta, ingresa el monto en XLM y haz clic en **"Aportar XLM"**. Al confirmar la firma en tu wallet, el progreso se actualizará al instante con un enlace a Stellar Expert.
+6. **Reclamar o pedir reembolso:**
+   - Si la vaca alcanzó su meta, el beneficiario verá el botón **"Reclamar fondos"**.
+   - Si venció el plazo sin alcanzar la meta, cada participante verá el botón **"Solicitar reembolso"** para recuperar su aporte exacto.
+
+---
+
+## 5. Cómo probarlo
+
+### Opción A: Pruebas unitarias del contrato (`cargo test`)
+
+Requisitos: **Rust + Cargo**.
 
 ```bash
 cargo test
 ```
 
-Las pruebas incluidas en [`contracts/vaca_cr/src/test.rs`](./contracts/vaca_cr/src/test.rs) cubren:
-1. **`test_successful_vaca_and_claim`**: múltiples participantes aportan hasta alcanzar la meta, se verifican los balances individuales y el beneficiario reclama el total recaudado.
+Las pruebas en [`contracts/vaca_cr/src/test.rs`](./contracts/vaca_cr/src/test.rs) cubren:
+1. **`test_create_multiple_vacas_and_claim`**: crea dos vacas independientes, registra múltiples aportes hasta cumplir la meta de la primera y verifica que el beneficiario reclame el total exacto.
 2. **`test_refund_when_deadline_expires_without_goal`**: verifica que no se pueda pedir reembolso antes del plazo, avanza el reloj del ledger (`env.ledger().set_timestamp(...)`), valida que tras vencer el plazo no entren más aportes ni se pueda reclamar, y comprueba que cada participante recupere su aporte exacto sin poder cobrar dos veces.
 3. **`test_rejects_invalid_amounts_and_requires_auth`**: valida el rechazo de montos `<= 0` y confirma mediante `env.auths()` que `contribute` exige la firma del contribuyente.
 
-### Compilar a Wasm y desplegar en Stellar Testnet
+### Opción B: Correr la landing page localmente
 
-#### Contrato desplegado y funcional en Testnet
+Requisitos: **Node.js 22+** y **pnpm**.
 
-- **Landing Page en vivo:** https://frarojas.github.io/vaca-cr-soroban/
-- **Contract ID:** `CAHS6XCJDVRZ7JOAQ7CV5CSBUJGGSWMSXDDUDMTQJSDXH4TDYX2FSHEP`
-- **Explorar en Stellar Lab:** https://lab.stellar.org/r/testnet/contract/CAHS6XCJDVRZ7JOAQ7CV5CSBUJGGSWMSXDDUDMTQJSDXH4TDYX2FSHEP
+```bash
+cd frontend
+pnpm install
+pnpm dev
+```
+
+Abre la URL local que imprime Vite (por defecto `http://localhost:5173`).
+
+### Opción C: Probar el contrato en vivo desde CLI o Stellar Lab
+
+- **Contract ID (Testnet):** `CAHS6XCJDVRZ7JOAQ7CV5CSBUJGGSWMSXDDUDMTQJSDXH4TDYX2FSHEP`
+- **Explorar e invocar en Stellar Lab:** https://lab.stellar.org/r/testnet/contract/CAHS6XCJDVRZ7JOAQ7CV5CSBUJGGSWMSXDDUDMTQJSDXH4TDYX2FSHEP
 - **Transacción de despliegue:** [`83ad51205b6fc0ac82b8fc61c90f1c10b3cd7100f27aa2f1d85c78ce8e666ec4`](https://stellar.expert/explorer/testnet/tx/83ad51205b6fc0ac82b8fc61c90f1c10b3cd7100f27aa2f1d85c78ce8e666ec4)
 - **Creación de Vaca #1:** [`e98289dd5ffdfcb2d05d70682ee87a9e1395b11c476f5a3c404344802610c068`](https://stellar.expert/explorer/testnet/tx/e98289dd5ffdfcb2d05d70682ee87a9e1395b11c476f5a3c404344802610c068)
 - **Aporte de prueba en vivo (1 XLM):** [`2b2a0ce2fda9276806896a323aec7b6b8272c05173e0192e1d11453314141332`](https://stellar.expert/explorer/testnet/tx/2b2a0ce2fda9276806896a323aec7b6b8272c05173e0192e1d11453314141332)
 
 ```bash
-# Consultar el estado actual de la Vaca #1 en Testnet
+# Consultar cuántas vacas existen
+stellar contract invoke \
+  --id CAHS6XCJDVRZ7JOAQ7CV5CSBUJGGSWMSXDDUDMTQJSDXH4TDYX2FSHEP \
+  --network testnet \
+  -- get_vaca_count
+
+# Consultar el estado actual de la Vaca #1
 stellar contract invoke \
   --id CAHS6XCJDVRZ7JOAQ7CV5CSBUJGGSWMSXDDUDMTQJSDXH4TDYX2FSHEP \
   --network testnet \
   -- get_status --vaca_id 1
 ```
 
-#### Cómo compilar y desplegar una nueva instancia
+#### Compilar y desplegar tu propia instancia (opcional)
 
 ```bash
 # Compilar contrato optimizado (.wasm)
 stellar contract build
 
-# Desplegar en Testnet (ajustando tus direcciones y fecha límite Unix)
+# Desplegar en Testnet
 stellar contract deploy \
   --wasm target/wasm32v1-none/release/vaca_cr.wasm \
   --source-account TU_CUENTA \
-  --network testnet \
-  -- \
-  --organizer TU_CUENTA \
-  --beneficiary DIRECCION_BENEFICIARIO \
-  --token CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC \
-  --title "Mejenga del Sabado" \
-  --goal 100000000 \
-  --deadline 1798200000
+  --network testnet
 ```
