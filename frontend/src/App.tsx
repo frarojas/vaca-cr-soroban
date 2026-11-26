@@ -32,10 +32,14 @@ import {
 import { useStellarWallet } from "./hooks/useStellarWallet";
 
 function formatDeadline(unixSeconds: number): string {
+  const date = new Date(unixSeconds * 1000);
+  if (!Number.isFinite(unixSeconds) || Number.isNaN(date.getTime())) {
+    return "—";
+  }
   return new Intl.DateTimeFormat("es-CR", {
     dateStyle: "medium",
     timeStyle: "short",
-  }).format(new Date(unixSeconds * 1000));
+  }).format(date);
 }
 
 export function App() {

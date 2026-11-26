@@ -99,10 +99,46 @@ async function getContractClient(
   });
 }
 
+type MaybeContractResult<T> =
+  | T
+  | {
+      isOk?: () => boolean;
+      isErr?: () => boolean;
+      unwrap?: () => T;
+      unwrapErr?: () => unknown;
+      value?: T;
+    };
+
+function unwrapContractResult<T>(res: MaybeContractResult<T>): T {
+  if (res && typeof res === "object") {
+    const candidate = res as {
+      isOk?: () => boolean;
+      isErr?: () => boolean;
+      unwrap?: () => T;
+      unwrapErr?: () => unknown;
+      value?: T;
+    };
+    if (typeof candidate.isErr === "function" && candidate.isErr()) {
+      const errVal =
+        typeof candidate.unwrapErr === "function"
+          ? candidate.unwrapErr()
+          : "Error del contrato";
+      throw new Error(String(errVal));
+    }
+    if (typeof candidate.unwrap === "function") {
+      return candidate.unwrap();
+    }
+    if ("value" in candidate && candidate.value !== undefined) {
+      return candidate.value;
+    }
+  }
+  return res as T;
+}
+
 export async function fetchVacaStatus(): Promise<VacaStatusView> {
   const client = await getContractClient();
   const tx = await client.get_status();
-  const raw = tx.result;
+  const raw = unwrapContractResult<RawVacaStatus>(tx.result);
 
   return {
     title: raw.title,
