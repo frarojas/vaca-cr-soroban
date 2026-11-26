@@ -44,6 +44,28 @@ function formatDeadline(unixSeconds: number): string {
   }).format(date);
 }
 
+function formatAppError(err: unknown, fallback: string): string {
+  let msg = fallback;
+  if (err instanceof Error && err.message) {
+    msg = err.message;
+  } else if (err && typeof err === "object" && "message" in err) {
+    const raw = (err as { message?: unknown }).message;
+    if (typeof raw === "string" && raw.trim()) {
+      msg = raw;
+    }
+  } else if (typeof err === "string" && err.trim()) {
+    msg = err;
+  }
+
+  if (/bad_auth|tx_bad_auth|network|passphrase/i.test(msg)) {
+    return `${msg} — Verifica que tu wallet esté en Stellar Testnet (nota: LOBSTR solo firma en Mainnet; para Testnet usa Freighter/Varial, xBull o Albedo).`;
+  }
+  if (/reject|cancel|denied|declined|user closed/i.test(msg)) {
+    return "Firma cancelada en la wallet.";
+  }
+  return msg;
+}
+
 export function App() {
   const wallet = useStellarWallet();
   const [vacas, setVacas] = useState<VacaStatusView[]>([]);
@@ -175,7 +197,7 @@ export function App() {
       await handleRefresh();
     } catch (err) {
       setTxMessage(null);
-      setTxError(err instanceof Error ? err.message : "No se pudo crear la vaca.");
+      setTxError(formatAppError(err, "No se pudo crear la vaca."));
     } finally {
       setTxBusy(false);
     }
@@ -201,7 +223,7 @@ export function App() {
       await handleRefresh();
     } catch (err) {
       setTxMessage(null);
-      setTxError(err instanceof Error ? err.message : "Error al aportar.");
+      setTxError(formatAppError(err, "Error al aportar."));
     } finally {
       setTxBusy(false);
     }
@@ -220,7 +242,7 @@ export function App() {
       await handleRefresh();
     } catch (err) {
       setTxMessage(null);
-      setTxError(err instanceof Error ? err.message : "No se pudo reclamar.");
+      setTxError(formatAppError(err, "No se pudo reclamar."));
     } finally {
       setTxBusy(false);
     }
@@ -239,7 +261,7 @@ export function App() {
       await handleRefresh();
     } catch (err) {
       setTxMessage(null);
-      setTxError(err instanceof Error ? err.message : "No se pudo reembolsar.");
+      setTxError(formatAppError(err, "No se pudo reembolsar."));
     } finally {
       setTxBusy(false);
     }
