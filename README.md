@@ -27,23 +27,23 @@ Esto lo hace un caso ideal para un contrato inteligente en **Stellar (Soroban)**
 
 El contrato está escrito en Rust (`#![no_std]`) usando `soroban-sdk` en [`contracts/vaca_cr/src/lib.rs`](./contracts/vaca_cr/src/lib.rs) y opera sobre cualquier token SEP-41 en Stellar (por ejemplo, XLM o USDC).
 
-### Flujo de estados
+### Flujo de estados (Multi-Vaca)
 
-1. **Creación (`__constructor`):**
-   - El organizador define el **título** (ej. `"Mejenga del Sabado"`), el **beneficiario**, el **token**, la **meta** (`goal > 0`) y la **fecha límite** (`deadline > timestamp actual`).
-   - Emite el evento `VacaCreated`.
+1. **Creación (`create_vaca`):**
+   - Cualquier organizador crea una nueva vaca indicando **título** (ej. `"Mejenga del Sabado"`), **beneficiario**, **token**, **meta** (`goal > 0`) y **fecha límite** (`deadline > timestamp actual`).
+   - El contrato asigna un `vaca_id` incremental (`1, 2, 3…`) y emite `VacaCreated`.
 2. **Aportes (`contribute`):**
-   - Antes del `deadline`, cualquier participante puede aportar un monto mayor a `0` autorizando su firma (`contributor.require_auth()`).
-   - El contrato transfiere los tokens a su propia dirección y guarda el acumulado individual en almacenamiento `persistent()` (`DataKey::Contribution(Address)`) extendiendo su TTL.
+   - Antes del `deadline`, cualquier participante puede aportar a un `vaca_id` autorizando su firma (`contributor.require_auth()`).
+   - El contrato transfiere los tokens a su propia dirección y guarda el acumulado individual en almacenamiento `persistent()` (`DataKey::Contribution(vaca_id, Address)`) extendiendo su TTL.
    - Emite el evento `Contributed`.
 3. **Retiro por meta cumplida (`claim`):**
-   - Si `total_raised >= goal`, únicamente el **beneficiario** (`config.beneficiary.require_auth()`) puede retirar todo lo recaudado.
-   - Marca `Claimed = true` antes de transferir los fondos y emite `Claimed`.
+   - Si `total_raised >= goal`, únicamente el **beneficiario** (`config.beneficiary.require_auth()`) de ese `vaca_id` puede retirar todo lo recaudado.
+   - Marca `Claimed(vaca_id) = true` antes de transferir los fondos y emite `Claimed`.
 4. **Reembolso si no se llega a la meta (`refund`):**
    - Si ya pasó el `deadline` (`timestamp >= deadline`) y **no** se alcanzó la meta (`total_raised < goal`), cada participante puede retirar exactamente su aporte.
    - Borra su registro de aporte antes de transferir para evitar dobles reembolsos y emite `Refunded`.
-5. **Consultas (`get_status`, `get_contribution`):**
-   - Permiten ver el estado general de la vaca (`total_raised`, `goal_reached`, `is_open`, `claimed`) y cuánto ha aportado una dirección específica.
+5. **Consultas (`get_vaca_count`, `get_status`, `get_contribution`):**
+   - Permiten listar todas las vacas creadas, ver el estado de cada una y consultar cuánto ha aportado una dirección específica.
 
 ### Decisiones técnicas aplicadas
 
@@ -72,17 +72,19 @@ Las pruebas incluidas en [`contracts/vaca_cr/src/test.rs`](./contracts/vaca_cr/s
 
 #### Contrato desplegado y funcional en Testnet
 
-- **Contract ID:** `CCBJUJLCPRXPZOUXHHYSVXX3WGCD3YG7DA3JT2U7GOECLOXV65LZBQ2N`
-- **Explorar en Stellar Lab:** https://lab.stellar.org/r/testnet/contract/CCBJUJLCPRXPZOUXHHYSVXX3WGCD3YG7DA3JT2U7GOECLOXV65LZBQ2N
-- **Transacción de despliegue:** [`f526f6a9dd7954a790badd40243b7933f2bfe4618d811fa29151e8b0253f1665`](https://stellar.expert/explorer/testnet/tx/f526f6a9dd7954a790badd40243b7933f2bfe4618d811fa29151e8b0253f1665)
-- **Aporte de prueba en vivo (1 XLM):** [`7e96d2de9fa0c036523356812e66a8dbadcb7edbb87dd6ba3a38a7864902d583`](https://stellar.expert/explorer/testnet/tx/7e96d2de9fa0c036523356812e66a8dbadcb7edbb87dd6ba3a38a7864902d583)
+- **Landing Page en vivo:** https://frarojas.github.io/vaca-cr-soroban/
+- **Contract ID:** `CAHS6XCJDVRZ7JOAQ7CV5CSBUJGGSWMSXDDUDMTQJSDXH4TDYX2FSHEP`
+- **Explorar en Stellar Lab:** https://lab.stellar.org/r/testnet/contract/CAHS6XCJDVRZ7JOAQ7CV5CSBUJGGSWMSXDDUDMTQJSDXH4TDYX2FSHEP
+- **Transacción de despliegue:** [`83ad51205b6fc0ac82b8fc61c90f1c10b3cd7100f27aa2f1d85c78ce8e666ec4`](https://stellar.expert/explorer/testnet/tx/83ad51205b6fc0ac82b8fc61c90f1c10b3cd7100f27aa2f1d85c78ce8e666ec4)
+- **Creación de Vaca #1:** [`e98289dd5ffdfcb2d05d70682ee87a9e1395b11c476f5a3c404344802610c068`](https://stellar.expert/explorer/testnet/tx/e98289dd5ffdfcb2d05d70682ee87a9e1395b11c476f5a3c404344802610c068)
+- **Aporte de prueba en vivo (1 XLM):** [`2b2a0ce2fda9276806896a323aec7b6b8272c05173e0192e1d11453314141332`](https://stellar.expert/explorer/testnet/tx/2b2a0ce2fda9276806896a323aec7b6b8272c05173e0192e1d11453314141332)
 
 ```bash
-# Consultar el estado actual del contrato desplegado en Testnet
+# Consultar el estado actual de la Vaca #1 en Testnet
 stellar contract invoke \
-  --id CCBJUJLCPRXPZOUXHHYSVXX3WGCD3YG7DA3JT2U7GOECLOXV65LZBQ2N \
+  --id CAHS6XCJDVRZ7JOAQ7CV5CSBUJGGSWMSXDDUDMTQJSDXH4TDYX2FSHEP \
   --network testnet \
-  -- get_status
+  -- get_status --vaca_id 1
 ```
 
 #### Cómo compilar y desplegar una nueva instancia

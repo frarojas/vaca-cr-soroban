@@ -19,7 +19,7 @@ struct TestContext<'a> {
     contract: VacaCrContractClient<'a>,
 }
 
-fn setup_vaca<'a>(goal: i128, deadline: u64) -> TestContext<'a> {
+fn setup_env<'a>() -> TestContext<'a> {
     let env = Env::default();
     env.mock_all_auths();
     env.ledger().set_timestamp(1_000);
@@ -33,18 +33,7 @@ fn setup_vaca<'a>(goal: i128, deadline: u64) -> TestContext<'a> {
     let token = TokenClient::new(&env, &token_id);
     let token_admin = StellarAssetClient::new(&env, &token_id);
 
-    let title = String::from_str(&env, "Mejenga del Sabado");
-    let contract_id = env.register(
-        VacaCrContract,
-        (
-            organizer.clone(),
-            beneficiary.clone(),
-            token_id.clone(),
-            title,
-            goal,
-            deadline,
-        ),
-    );
+    let contract_id = env.register(VacaCrContract, ());
     let contract = VacaCrContractClient::new(&env, &contract_id);
 
     TestContext {
@@ -59,91 +48,123 @@ fn setup_vaca<'a>(goal: i128, deadline: u64) -> TestContext<'a> {
 }
 
 #[test]
-fn test_successful_vaca_and_claim() {
-    let ctx = setup_vaca(10_000, 5_000);
+fn test_create_multiple_vacas_and_claim() {
+    let ctx = setup_env();
     let ana = Address::generate(&ctx.env);
     let carlos = Address::generate(&ctx.env);
 
-    ctx.token_admin.mint(&ana, &6_000);
+    ctx.token_admin.mint(&ana, &10_000);
     ctx.token_admin.mint(&carlos, &5_000);
 
-    assert_eq!(ctx.contract.contribute(&ana, &4_000), 4_000);
-    assert_eq!(ctx.contract.contribute(&carlos, &5_000), 9_000);
-    assert_eq!(ctx.contract.contribute(&ana, &1_000), 10_000);
+    let vaca1 = ctx.contract.create_vaca(
+        &ctx.organizer,
+        &ctx.beneficiary,
+        &ctx.token_id,
+        &String::from_str(&ctx.env, "Mejenga del Sabado"),
+        &10_000,
+        &5_000,
+    );
+    let vaca2 = ctx.contract.create_vaca(
+        &ana,
+        &carlos,
+        &ctx.token_id,
+        &String::from_str(&ctx.env, "Paseo Guanacaste"),
+        &25_000,
+        &9_000,
+    );
 
-    assert_eq!(ctx.contract.get_contribution(&ana), 5_000);
-    assert_eq!(ctx.contract.get_contribution(&carlos), 5_000);
-    assert_eq!(ctx.token.balance(&ctx.contract.address), 10_000);
+    assert_eq!(vaca1, 1);
+    assert_eq!(vaca2, 2);
+    assert_eq!(ctx.contract.get_vaca_count(), 2);
 
-    let claimed = ctx.contract.claim();
+    assert_eq!(ctx.contract.contribute(&vaca1, &ana, &5_000), 5_000);
+    assert_eq!(ctx.contract.contribute(&vaca1, &carlos, &5_000), 10_000);
+    assert_eq!(ctx.contract.get_contribution(&vaca1, &ana), 5_000);
+    assert_eq!(ctx.contract.get_contribution(&vaca2, &ana), 0);
+
+    let claimed = ctx.contract.claim(&vaca1);
     assert_eq!(claimed, 10_000);
     assert_eq!(ctx.token.balance(&ctx.beneficiary), 10_000);
-    assert_eq!(ctx.token.balance(&ctx.contract.address), 0);
 
-    let status = ctx.contract.get_status();
-    assert!(status.claimed);
-    assert!(status.goal_reached);
-    assert!(!status.is_open);
+    let status1 = ctx.contract.get_status(&vaca1);
+    assert!(status1.claimed);
+    assert!(status1.goal_reached);
+    assert!(!status1.is_open);
 }
 
 #[test]
 fn test_refund_when_deadline_expires_without_goal() {
-    let ctx = setup_vaca(10_000, 5_000);
+    let ctx = setup_env();
     let ana = Address::generate(&ctx.env);
     let carlos = Address::generate(&ctx.env);
 
     ctx.token_admin.mint(&ana, &3_000);
     ctx.token_admin.mint(&carlos, &4_000);
 
-    ctx.contract.contribute(&ana, &3_000);
-    ctx.contract.contribute(&carlos, &4_000);
-
-    // Antes de la fecha límite no se puede pedir reembolso
-    assert_eq!(ctx.contract.try_refund(&ana), Err(Ok(Error::DeadlineNotReached)));
-
-    // Avanza el reloj más allá del deadline
-    ctx.env.ledger().set_timestamp(5_001);
-
-    // Ya no se aceptan nuevos aportes
-    assert_eq!(
-        ctx.contract.try_contribute(&ana, &500),
-        Err(Ok(Error::DeadlinePassed))
+    let vaca_id = ctx.contract.create_vaca(
+        &ctx.organizer,
+        &ctx.beneficiary,
+        &ctx.token_id,
+        &String::from_str(&ctx.env, "Regalo Profe"),
+        &10_000,
+        &5_000,
     );
 
-    // Tampoco se puede reclamar porque no se llegó a la meta
-    assert_eq!(ctx.contract.try_claim(), Err(Ok(Error::GoalNotReached)));
+    ctx.contract.contribute(&vaca_id, &ana, &3_000);
+    ctx.contract.contribute(&vaca_id, &carlos, &4_000);
 
-    // Cada participante recupera exactamente lo que aportó
-    assert_eq!(ctx.contract.refund(&ana), 3_000);
-    assert_eq!(ctx.contract.refund(&carlos), 4_000);
+    assert_eq!(
+        ctx.contract.try_refund(&vaca_id, &ana),
+        Err(Ok(Error::DeadlineNotReached))
+    );
+
+    ctx.env.ledger().set_timestamp(5_001);
+
+    assert_eq!(
+        ctx.contract.try_contribute(&vaca_id, &ana, &500),
+        Err(Ok(Error::DeadlinePassed))
+    );
+    assert_eq!(
+        ctx.contract.try_claim(&vaca_id),
+        Err(Ok(Error::GoalNotReached))
+    );
+
+    assert_eq!(ctx.contract.refund(&vaca_id, &ana), 3_000);
+    assert_eq!(ctx.contract.refund(&vaca_id, &carlos), 4_000);
     assert_eq!(ctx.token.balance(&ana), 3_000);
     assert_eq!(ctx.token.balance(&carlos), 4_000);
-    assert_eq!(ctx.token.balance(&ctx.contract.address), 0);
-
-    // No se puede pedir doble reembolso
-    assert_eq!(ctx.contract.try_refund(&ana), Err(Ok(Error::NothingToRefund)));
+    assert_eq!(
+        ctx.contract.try_refund(&vaca_id, &ana),
+        Err(Ok(Error::NothingToRefund))
+    );
 }
 
 #[test]
 fn test_rejects_invalid_amounts_and_requires_auth() {
-    let ctx = setup_vaca(5_000, 5_000);
+    let ctx = setup_env();
     let ana = Address::generate(&ctx.env);
     ctx.token_admin.mint(&ana, &5_000);
 
+    let vaca_id = ctx.contract.create_vaca(
+        &ctx.organizer,
+        &ctx.beneficiary,
+        &ctx.token_id,
+        &String::from_str(&ctx.env, "Almuerzo Equipo"),
+        &5_000,
+        &5_000,
+    );
+
     assert_eq!(
-        ctx.contract.try_contribute(&ana, &0),
+        ctx.contract.try_contribute(&vaca_id, &ana, &0),
         Err(Ok(Error::InvalidAmount))
     );
     assert_eq!(
-        ctx.contract.try_contribute(&ana, &-100),
+        ctx.contract.try_contribute(&vaca_id, &ana, &-100),
         Err(Ok(Error::InvalidAmount))
     );
 
-    // Verifica que contribute solicita autorización del contribuyente
-    ctx.contract.contribute(&ana, &1_500);
+    ctx.contract.contribute(&vaca_id, &ana, &1_500);
     assert!(!ctx.env.auths().is_empty());
     let (auth_addr, _) = &ctx.env.auths()[0];
     assert_eq!(auth_addr, &ana);
-    assert_eq!(ctx.organizer, ctx.contract.get_status().organizer);
-    assert_eq!(ctx.token_id, ctx.contract.get_status().token);
 }

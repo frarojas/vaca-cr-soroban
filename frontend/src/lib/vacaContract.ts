@@ -2,18 +2,20 @@ import * as StellarSdk from "@stellar/stellar-sdk";
 import { contract } from "@stellar/stellar-sdk";
 
 export const CONTRACT_ID =
-  "CCBJUJLCPRXPZOUXHHYSVXX3WGCD3YG7DA3JT2U7GOECLOXV65LZBQ2N";
+  "CAHS6XCJDVRZ7JOAQ7CV5CSBUJGGSWMSXDDUDMTQJSDXH4TDYX2FSHEP";
+export const NATIVE_XLM_SAC =
+  "CDLZFC3SYJYDZT7K67VZ75HPJVIEUVNIXF47ZG2FB2RMQQVU2HHGCYSC";
 export const TESTNET_RPC_URL = "https://soroban-testnet.stellar.org";
 export const TESTNET_HORIZON_URL = "https://horizon-testnet.stellar.org";
 export const NETWORK_PASSPHRASE = StellarSdk.Networks.TESTNET;
 export const STELLAR_LAB_URL = `https://lab.stellar.org/r/testnet/contract/${CONTRACT_ID}`;
 export const EXPLORER_CONTRACT_URL = `https://stellar.expert/explorer/testnet/contract/${CONTRACT_ID}`;
 
-// Used only for read-only simulation when no wallet is connected yet.
 const READ_ONLY_SOURCE =
   "GCJLYYUL76PUNEYTUMAQHDUHZQEVGUDODZVDE2H6ZFN3KWH4OCUQ5UKS";
 
 export interface RawVacaStatus {
+  id: bigint;
   title: string;
   organizer: string;
   beneficiary: string;
@@ -27,6 +29,7 @@ export interface RawVacaStatus {
 }
 
 export interface VacaStatusView {
+  id: number;
   title: string;
   organizer: string;
   beneficiary: string;
@@ -40,22 +43,38 @@ export interface VacaStatusView {
 }
 
 interface VacaContractMethods {
+  get_vaca_count: (
+    options?: contract.MethodOptions
+  ) => Promise<contract.AssembledTransaction<bigint>>;
   get_status: (
+    args: { vaca_id: bigint },
     options?: contract.MethodOptions
   ) => Promise<contract.AssembledTransaction<RawVacaStatus>>;
   get_contribution: (
-    args: { contributor: string },
+    args: { vaca_id: bigint; contributor: string },
+    options?: contract.MethodOptions
+  ) => Promise<contract.AssembledTransaction<bigint>>;
+  create_vaca: (
+    args: {
+      organizer: string;
+      beneficiary: string;
+      token: string;
+      title: string;
+      goal: bigint;
+      deadline: bigint;
+    },
     options?: contract.MethodOptions
   ) => Promise<contract.AssembledTransaction<bigint>>;
   contribute: (
-    args: { contributor: string; amount: bigint },
+    args: { vaca_id: bigint; contributor: string; amount: bigint },
     options?: contract.MethodOptions
   ) => Promise<contract.AssembledTransaction<bigint>>;
   claim: (
+    args: { vaca_id: bigint },
     options?: contract.MethodOptions
   ) => Promise<contract.AssembledTransaction<bigint>>;
   refund: (
-    args: { contributor: string },
+    args: { vaca_id: bigint; contributor: string },
     options?: contract.MethodOptions
   ) => Promise<contract.AssembledTransaction<bigint>>;
 }
@@ -86,17 +105,8 @@ export function shortenAddress(address: string, head = 6, tail = 6): string {
   return `${address.slice(0, head)}…${address.slice(-tail)}`;
 }
 
-async function getContractClient(
-  publicKey?: string,
-  signTransaction?: contract.ClientOptions["signTransaction"]
-) {
-  return contract.Client.from<VacaContractMethods>({
-    contractId: CONTRACT_ID,
-    rpcUrl: TESTNET_RPC_URL,
-    networkPassphrase: NETWORK_PASSPHRASE,
-    publicKey: publicKey ?? READ_ONLY_SOURCE,
-    signTransaction,
-  });
+export function isValidStellarAddress(address: string): boolean {
+  return StellarSdk.StrKey.isValidEd25519PublicKey(address.trim());
 }
 
 type MaybeContractResult<T> =
@@ -112,7 +122,6 @@ type MaybeContractResult<T> =
 function unwrapContractResult<T>(res: MaybeContractResult<T>): T {
   if (res && typeof res === "object") {
     const candidate = res as {
-      isOk?: () => boolean;
       isErr?: () => boolean;
       unwrap?: () => T;
       unwrapErr?: () => unknown;
@@ -135,12 +144,22 @@ function unwrapContractResult<T>(res: MaybeContractResult<T>): T {
   return res as T;
 }
 
-export async function fetchVacaStatus(): Promise<VacaStatusView> {
-  const client = await getContractClient();
-  const tx = await client.get_status();
-  const raw = unwrapContractResult<RawVacaStatus>(tx.result);
+async function getContractClient(
+  publicKey?: string,
+  signTransaction?: contract.ClientOptions["signTransaction"]
+) {
+  return contract.Client.from<VacaContractMethods>({
+    contractId: CONTRACT_ID,
+    rpcUrl: TESTNET_RPC_URL,
+    networkPassphrase: NETWORK_PASSPHRASE,
+    publicKey: publicKey ?? READ_ONLY_SOURCE,
+    signTransaction,
+  });
+}
 
+function mapStatus(raw: RawVacaStatus): VacaStatusView {
   return {
+    id: Number(raw.id),
     title: raw.title,
     organizer: raw.organizer,
     beneficiary: raw.beneficiary,
@@ -154,13 +173,81 @@ export async function fetchVacaStatus(): Promise<VacaStatusView> {
   };
 }
 
-export async function fetchUserContribution(address: string): Promise<number> {
+export async function fetchAllVacas(): Promise<VacaStatusView[]> {
+  const client = await getContractClient();
+  const countTx = await client.get_vaca_count();
+  const count = Number(unwrapContractResult<bigint>(countTx.result));
+  if (count <= 0) return [];
+
+  const ids = Array.from({ length: count }, (_, idx) => BigInt(count - idx));
+  const results = await Promise.all(
+    ids.map(async (vacaId) => {
+      const tx = await client.get_status({ vaca_id: vacaId });
+      return mapStatus(unwrapContractResult<RawVacaStatus>(tx.result));
+    })
+  );
+
+  return results;
+}
+
+export async function fetchUserContributions(
+  address: string,
+  vacaIds: number[]
+): Promise<Record<number, number>> {
+  if (vacaIds.length === 0) return {};
   const client = await getContractClient(address);
-  const tx = await client.get_contribution({ contributor: address });
-  return stroopsToXlm(tx.result);
+  const entries = await Promise.all(
+    vacaIds.map(async (id) => {
+      const tx = await client.get_contribution({
+        vaca_id: BigInt(id),
+        contributor: address,
+      });
+      return [id, stroopsToXlm(unwrapContractResult<bigint>(tx.result))] as const;
+    })
+  );
+  return Object.fromEntries(entries);
+}
+
+export async function createNewVaca(
+  params: {
+    organizer: string;
+    beneficiary: string;
+    title: string;
+    goalXlm: string;
+    days: number;
+  },
+  signTransaction: contract.ClientOptions["signTransaction"]
+): Promise<{ vacaId: number; hash: string }> {
+  if (!isValidStellarAddress(params.beneficiary)) {
+    throw new Error("La dirección del beneficiario debe ser una llave Stellar válida (G…).");
+  }
+  const title = params.title.trim();
+  if (!title) {
+    throw new Error("Ingresa un nombre para la vaca.");
+  }
+  const goal = xlmToStroops(params.goalXlm);
+  const days = Math.max(1, Math.min(365, Math.floor(params.days)));
+  const deadline = BigInt(Math.floor(Date.now() / 1000) + days * 86_400);
+
+  const client = await getContractClient(params.organizer, signTransaction);
+  const tx = await client.create_vaca({
+    organizer: params.organizer,
+    beneficiary: params.beneficiary.trim(),
+    token: NATIVE_XLM_SAC,
+    title,
+    goal,
+    deadline,
+  });
+  const sent = await tx.signAndSend();
+  const vacaId = Number(unwrapContractResult<bigint>(sent.result));
+  return {
+    vacaId,
+    hash: sent.sendTransactionResponse?.hash ?? "",
+  };
 }
 
 export async function contributeToVaca(
+  vacaId: number,
   address: string,
   amountXlm: string,
   signTransaction: contract.ClientOptions["signTransaction"]
@@ -168,6 +255,7 @@ export async function contributeToVaca(
   const stroops = xlmToStroops(amountXlm);
   const client = await getContractClient(address, signTransaction);
   const tx = await client.contribute({
+    vaca_id: BigInt(vacaId),
     contributor: address,
     amount: stroops,
   });
@@ -176,21 +264,26 @@ export async function contributeToVaca(
 }
 
 export async function claimVaca(
+  vacaId: number,
   address: string,
   signTransaction: contract.ClientOptions["signTransaction"]
 ): Promise<string> {
   const client = await getContractClient(address, signTransaction);
-  const tx = await client.claim();
+  const tx = await client.claim({ vaca_id: BigInt(vacaId) });
   const sent = await tx.signAndSend();
   return sent.sendTransactionResponse?.hash ?? "";
 }
 
 export async function refundVaca(
+  vacaId: number,
   address: string,
   signTransaction: contract.ClientOptions["signTransaction"]
 ): Promise<string> {
   const client = await getContractClient(address, signTransaction);
-  const tx = await client.refund({ contributor: address });
+  const tx = await client.refund({
+    vaca_id: BigInt(vacaId),
+    contributor: address,
+  });
   const sent = await tx.signAndSend();
   return sent.sendTransactionResponse?.hash ?? "";
 }

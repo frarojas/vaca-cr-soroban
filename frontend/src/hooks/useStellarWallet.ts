@@ -19,6 +19,15 @@ function ensureKit() {
   initialized = true;
 }
 
+function extractErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  if (err && typeof err === "object" && "message" in err) {
+    const msg = (err as { message?: unknown }).message;
+    if (typeof msg === "string" && msg.trim().length > 0) return msg;
+  }
+  return "No se pudo conectar la wallet.";
+}
+
 export function useStellarWallet() {
   const [address, setAddress] = useState<string | null>(null);
   const [walletName, setWalletName] = useState<string | null>(null);
@@ -69,7 +78,7 @@ export function useStellarWallet() {
         setWalletName("Wallet conectada");
       }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Error al conectar wallet.";
+      const msg = extractErrorMessage(err);
       if (!/closed|cancel/i.test(msg)) {
         setError(msg);
       }
@@ -91,21 +100,21 @@ export function useStellarWallet() {
   const signTransaction: NonNullable<contract.ClientOptions["signTransaction"]> =
     useCallback(
       async (xdr: string) => {
-      if (!address) {
-        throw new Error("Conecta tu wallet primero.");
-      }
-      const { signedTxXdr, signerAddress } =
-        await StellarWalletsKit.signTransaction(xdr, {
-          networkPassphrase: NETWORK_PASSPHRASE,
-          address,
-        });
-      return {
-        signedTxXdr,
-        signerAddress: signerAddress ?? address,
-      };
-    },
-    [address]
-  );
+        if (!address) {
+          throw new Error("Conecta tu wallet primero.");
+        }
+        const { signedTxXdr, signerAddress } =
+          await StellarWalletsKit.signTransaction(xdr, {
+            networkPassphrase: NETWORK_PASSPHRASE,
+            address,
+          });
+        return {
+          signedTxXdr,
+          signerAddress: signerAddress ?? address,
+        };
+      },
+      [address]
+    );
 
   return {
     address,
