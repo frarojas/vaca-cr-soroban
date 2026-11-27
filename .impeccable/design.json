@@ -1,0 +1,426 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-27T05:39:00Z",
+  "title": "Design System: VacaCR",
+  "extensions": {
+    "colorMeta": {
+      "cream": {
+        "role": "neutral",
+        "displayName": "Warm Stucco Cream",
+        "canonical": "oklch(94.2% 0.026 67.5)",
+        "tonalRamp": [
+          "oklch(18% 0.014 67.5)",
+          "oklch(29% 0.020 67.5)",
+          "oklch(42% 0.024 67.5)",
+          "oklch(56% 0.028 67.5)",
+          "oklch(70% 0.030 67.5)",
+          "oklch(83% 0.028 67.5)",
+          "oklch(94.2% 0.026 67.5)",
+          "oklch(97.5% 0.012 67.5)"
+        ]
+      },
+      "cream-deep": {
+        "role": "neutral",
+        "displayName": "Aged Pulpería Cream",
+        "canonical": "oklch(91.4% 0.036 69.2)",
+        "tonalRamp": [
+          "oklch(17% 0.016 69.2)",
+          "oklch(28% 0.024 69.2)",
+          "oklch(41% 0.032 69.2)",
+          "oklch(55% 0.038 69.2)",
+          "oklch(69% 0.040 69.2)",
+          "oklch(81% 0.038 69.2)",
+          "oklch(91.4% 0.036 69.2)",
+          "oklch(96.5% 0.016 69.2)"
+        ]
+      },
+      "ticket-cream": {
+        "role": "neutral",
+        "displayName": "Warm Ledger Parchment",
+        "canonical": "oklch(96.6% 0.017 72.8)",
+        "tonalRamp": [
+          "oklch(18% 0.010 72.8)",
+          "oklch(30% 0.014 72.8)",
+          "oklch(43% 0.018 72.8)",
+          "oklch(57% 0.020 72.8)",
+          "oklch(71% 0.020 72.8)",
+          "oklch(84% 0.019 72.8)",
+          "oklch(92% 0.018 72.8)",
+          "oklch(96.6% 0.017 72.8)"
+        ]
+      },
+      "paper-input": {
+        "role": "neutral",
+        "displayName": "Chalk Ticket Paper",
+        "canonical": "oklch(97.5% 0.005 84.5)",
+        "tonalRamp": [
+          "oklch(18% 0.004 84.5)",
+          "oklch(30% 0.005 84.5)",
+          "oklch(43% 0.006 84.5)",
+          "oklch(57% 0.007 84.5)",
+          "oklch(71% 0.007 84.5)",
+          "oklch(84% 0.006 84.5)",
+          "oklch(92% 0.006 84.5)",
+          "oklch(97.5% 0.005 84.5)"
+        ]
+      },
+      "vermilion": {
+        "role": "primary",
+        "displayName": "Brick Vermilion",
+        "canonical": "oklch(52.8% 0.178 29.4)",
+        "tonalRamp": [
+          "oklch(20% 0.075 29.4)",
+          "oklch(31% 0.125 29.4)",
+          "oklch(42% 0.160 29.4)",
+          "oklch(52.8% 0.178 29.4)",
+          "oklch(64% 0.155 29.4)",
+          "oklch(76% 0.110 29.4)",
+          "oklch(87% 0.062 29.4)",
+          "oklch(95% 0.024 29.4)"
+        ]
+      },
+      "vermilion-hover": {
+        "role": "primary",
+        "displayName": "Fired Vermilion",
+        "canonical": "oklch(46.8% 0.165 29.2)",
+        "tonalRamp": [
+          "oklch(18% 0.070 29.2)",
+          "oklch(28% 0.115 29.2)",
+          "oklch(38% 0.148 29.2)",
+          "oklch(46.8% 0.165 29.2)",
+          "oklch(60% 0.148 29.2)",
+          "oklch(73% 0.105 29.2)",
+          "oklch(85% 0.058 29.2)",
+          "oklch(94.5% 0.022 29.2)"
+        ]
+      },
+      "cobalt-band": {
+        "role": "secondary",
+        "displayName": "Buseta Enamel Cobalt",
+        "canonical": "oklch(39.4% 0.128 255.4)",
+        "tonalRamp": [
+          "oklch(18% 0.065 255.4)",
+          "oklch(28% 0.102 255.4)",
+          "oklch(39.4% 0.128 255.4)",
+          "oklch(51% 0.124 255.4)",
+          "oklch(64% 0.102 255.4)",
+          "oklch(77% 0.070 255.4)",
+          "oklch(88% 0.038 255.4)",
+          "oklch(95.5% 0.015 255.4)"
+        ]
+      },
+      "cobalt-btn": {
+        "role": "secondary",
+        "displayName": "Enamel Cobalt Action",
+        "canonical": "oklch(39.2% 0.121 256.2)",
+        "tonalRamp": [
+          "oklch(18% 0.062 256.2)",
+          "oklch(28% 0.098 256.2)",
+          "oklch(39.2% 0.121 256.2)",
+          "oklch(51% 0.118 256.2)",
+          "oklch(64% 0.098 256.2)",
+          "oklch(77% 0.068 256.2)",
+          "oklch(88% 0.036 256.2)",
+          "oklch(95.5% 0.014 256.2)"
+        ]
+      },
+      "cobalt-hover": {
+        "role": "secondary",
+        "displayName": "Deep Garage Cobalt",
+        "canonical": "oklch(32.5% 0.106 255.1)",
+        "tonalRamp": [
+          "oklch(16% 0.058 255.1)",
+          "oklch(24% 0.088 255.1)",
+          "oklch(32.5% 0.106 255.1)",
+          "oklch(45% 0.112 255.1)",
+          "oklch(59% 0.096 255.1)",
+          "oklch(73% 0.068 255.1)",
+          "oklch(86% 0.036 255.1)",
+          "oklch(95% 0.014 255.1)"
+        ]
+      },
+      "gold-rail": {
+        "role": "tertiary",
+        "displayName": "Maracuyá Route Gold",
+        "canonical": "oklch(79.6% 0.156 80.2)",
+        "tonalRamp": [
+          "oklch(20% 0.048 80.2)",
+          "oklch(33% 0.082 80.2)",
+          "oklch(46% 0.115 80.2)",
+          "oklch(60% 0.138 80.2)",
+          "oklch(71% 0.150 80.2)",
+          "oklch(79.6% 0.156 80.2)",
+          "oklch(89% 0.095 80.2)",
+          "oklch(95.5% 0.038 80.2)"
+        ]
+      },
+      "gold-shade": {
+        "role": "tertiary",
+        "displayName": "Sign-Painter Gold Shade",
+        "canonical": "oklch(79.4% 0.132 81.6)",
+        "tonalRamp": [
+          "oklch(20% 0.042 81.6)",
+          "oklch(33% 0.072 81.6)",
+          "oklch(46% 0.100 81.6)",
+          "oklch(60% 0.120 81.6)",
+          "oklch(71% 0.128 81.6)",
+          "oklch(79.4% 0.132 81.6)",
+          "oklch(89% 0.082 81.6)",
+          "oklch(95.5% 0.032 81.6)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Roasted Coffee Ink",
+        "canonical": "oklch(20.1% 0.018 51.3)",
+        "tonalRamp": [
+          "oklch(15% 0.014 51.3)",
+          "oklch(20.1% 0.018 51.3)",
+          "oklch(33% 0.022 51.3)",
+          "oklch(47% 0.022 51.3)",
+          "oklch(61% 0.020 51.3)",
+          "oklch(75% 0.016 51.3)",
+          "oklch(87% 0.011 51.3)",
+          "oklch(95% 0.006 51.3)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Weathered Umber",
+        "canonical": "oklch(42.6% 0.022 61.8)",
+        "tonalRamp": [
+          "oklch(17% 0.014 61.8)",
+          "oklch(29% 0.019 61.8)",
+          "oklch(42.6% 0.022 61.8)",
+          "oklch(55% 0.022 61.8)",
+          "oklch(68% 0.020 61.8)",
+          "oklch(80% 0.016 61.8)",
+          "oklch(89% 0.011 61.8)",
+          "oklch(95.5% 0.006 61.8)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Warm Mortar Rule",
+        "canonical": "oklch(55.8% 0.024 68.4)",
+        "tonalRamp": [
+          "oklch(18% 0.014 68.4)",
+          "oklch(30% 0.019 68.4)",
+          "oklch(43% 0.022 68.4)",
+          "oklch(55.8% 0.024 68.4)",
+          "oklch(68% 0.022 68.4)",
+          "oklch(80% 0.018 68.4)",
+          "oklch(89% 0.012 68.4)",
+          "oklch(95.5% 0.006 68.4)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display (Sign-Painter Placard)",
+        "purpose": "Hero vaca destination titles in uppercase Jockey One with warm gold drop-shade."
+      },
+      "numeral": {
+        "displayName": "Numeral & Wordmark (Fare Board)",
+        "purpose": "Smooth oval condensed Barlow Condensed numerals (0.00 / 10.00 XLM) and the VacaCR masthead wordmark."
+      },
+      "headline": {
+        "displayName": "Headline (Section Header)",
+        "purpose": "Major Archivo section headings across the narrative ledger, live board, and commission sheet."
+      },
+      "title": {
+        "displayName": "Title (Ticket & Rule Stamp)",
+        "purpose": "Individual vaca ticket titles in the live roster and condensed contract rule stamps."
+      },
+      "body": {
+        "displayName": "Body (Tabular Ledger Copy)",
+        "purpose": "Archivo narrative explanations, comparison ledger cells, and contract rule summaries (58–66ch max)."
+      },
+      "label": {
+        "displayName": "Label (Stamps & Controls)",
+        "purpose": "Status stamps, quick-amount preset chips, form labels, and Parada 1–3 onboarding badges."
+      },
+      "mono": {
+        "displayName": "Mono (On-Chain Identifiers)",
+        "purpose": "System ui-monospace chips for Stellar G…/C… addresses, Soroban function names, and RPC hostnames."
+      }
+    },
+    "shadows": [
+      {
+        "name": "hero-placard-inset-rim",
+        "value": "inset 0 0 0 0.24cqw #0f4787",
+        "purpose": "Inward cobalt pinstripe inside the hero placard's outer cream border (3px on mobile) so the frame stays strictly within its bounding box."
+      },
+      {
+        "name": "commission-concentric-ring",
+        "value": "0 0 0 4px #0f4787, 0 0 0 7px #f7e9d9",
+        "purpose": "Stepped painted-enamel rim separating the below-the-fold vaca creation sheet from its full-bleed cobalt band."
+      },
+      {
+        "name": "manifest-ambient-lift",
+        "value": "0 10px 24px rgba(15, 71, 135, 0.08)",
+        "purpose": "Soft cobalt-tinted ambient grounding under the verifiable Testnet contract manifest."
+      },
+      {
+        "name": "ticket-ambient-lift",
+        "value": "0 10px 24px rgba(29, 21, 16, 0.06)",
+        "purpose": "Whispered coffee-ink ambient lift separating active vaca tickets from the stucco canvas."
+      },
+      {
+        "name": "ghost-pin-preview-glow",
+        "value": "0 3px 10px rgba(199, 56, 40, 0.32)",
+        "purpose": "Vermilion halo beneath the projected route pin when previewing an XLM contribution."
+      },
+      {
+        "name": "sign-painter-gold-shade",
+        "value": "1.5px 2.5px 1px rgba(229, 178, 76, 0.72)",
+        "purpose": "Warm offset text-shadow painted behind Jockey One vaca titles and Barlow Condensed milestone numerals."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-route",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Crisp physical deceleration curve for route pin travel, preview stripes, and button presses."
+      },
+      {
+        "name": "duration-route",
+        "value": "420ms",
+        "purpose": "Travel duration for SALIDA → META progress fills, pins, and diagonal preview clip-paths."
+      },
+      {
+        "name": "duration-press",
+        "value": "180ms",
+        "purpose": "Tactile background, shadow, and 1px downward press transition on enameled buttons."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "md",
+        "value": "960px"
+      },
+      {
+        "name": "sm",
+        "value": "720px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Contribution Button",
+      "kind": "button",
+      "refersTo": "button-vermilion",
+      "description": "Brick vermilion double-pinstripe CTA reserved exclusively for committing XLM to a vaca.",
+      "html": "<button type=\"button\" class=\"ds-btn-vermilion\">Aportar XLM</button>",
+      "css": ".ds-btn-vermilion { display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem; min-height: 44px; padding: 0.55rem 1.05rem; border-radius: 9px; background-color: var(--color-vermilion, #c73828); color: var(--color-paper-input, #f8f7f4); border: 2px solid #8c271a; outline: 1.5px solid rgba(247, 233, 217, 0.78); outline-offset: -5px; font-family: var(--font-body, 'Archivo', sans-serif); font-size: 0.95rem; font-weight: 600; font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 180ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-vermilion:hover { background-color: var(--color-vermilion-hover, #ad2d1f); } .ds-btn-vermilion:focus-visible { outline: 2.5px solid var(--color-vermilion, #c73828); outline-offset: 2px; } .ds-btn-vermilion:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Cobalt Enamel Action Button",
+      "kind": "button",
+      "refersTo": "button-cobalt",
+      "description": "Enamel cobalt double-pinstripe button for wallet connection, vaca creation, claims, and explorer inspection.",
+      "html": "<button type=\"button\" class=\"ds-btn-cobalt\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1\"/><path d=\"M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4\"/></svg><span>Conectar Wallet</span></button>",
+      "css": ".ds-btn-cobalt { display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem; min-height: 44px; padding: 0.55rem 1.05rem; border-radius: 9px; background-color: var(--color-cobalt-btn, #164584); color: var(--color-paper-input, #f8f7f4); border: 2px solid #0e3263; outline: 1.5px solid rgba(247, 233, 217, 0.78); outline-offset: -5px; font-family: var(--font-body, 'Archivo', sans-serif); font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 180ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-cobalt:hover { background-color: var(--color-cobalt-hover, #0b3568); } .ds-btn-cobalt:focus-visible { outline: 2.5px solid var(--color-vermilion, #c73828); outline-offset: 2px; } .ds-btn-cobalt:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Double-Pinstripe Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Warm stucco cream button with dual coffee-ink pinstripes for RPC refresh, Friendbot funding, and refunds.",
+      "html": "<button type=\"button\" class=\"ds-btn-outline\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8\"/><path d=\"M21 3v5h-5\"/><path d=\"M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16\"/><path d=\"M8 16H3v5\"/></svg><span>Actualizar estado</span></button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem; min-height: 44px; padding: 0.55rem 1.05rem; border-radius: 9px; background-color: var(--color-cream, #f7e9d9); color: var(--color-ink, #1d1510); border: 2px solid var(--color-ink, #1d1510); outline: 1.5px solid var(--color-ink, #1d1510); outline-offset: -5px; font-family: var(--font-body, 'Archivo', sans-serif); font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 180ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-outline:hover { background-color: var(--color-cream-deep, #f2dec7); } .ds-btn-outline:focus-visible { outline: 2.5px solid var(--color-vermilion, #c73828); outline-offset: 2px; } .ds-btn-outline:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "Quick-Amount Preset Chips",
+      "kind": "chip",
+      "refersTo": "chip-amount",
+      "description": "Tabular-numeral XLM preset chips that highlight in Maracuyá Route Gold when selected or hovered.",
+      "html": "<div class=\"ds-chip-row\" role=\"group\" aria-label=\"Montos rápidos en XLM\"><button type=\"button\" class=\"ds-chip\">+1.0</button><button type=\"button\" class=\"ds-chip ds-chip--active\">+2.5</button><button type=\"button\" class=\"ds-chip\">+5.0</button></div>",
+      "css": ".ds-chip-row { display: inline-flex; gap: 0.35rem; } .ds-chip { min-height: 38px; padding: 0.3rem 0.62rem; border-radius: 8px; border: 1.5px solid var(--color-rule, #7e7264); background-color: var(--color-cream, #f7e9d9); color: var(--color-ink, #1d1510); font-family: var(--font-body, 'Archivo', sans-serif); font-size: 0.84rem; font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 180ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-chip:hover, .ds-chip--active { background-color: var(--color-gold-rail, #ebb02d); border-color: #593e12; } .ds-chip:focus-visible { outline: 2.5px solid var(--color-vermilion, #c73828); outline-offset: 2px; } .ds-chip:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "XLM Amount Input Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Chalk-paper numeric input shell with right-aligned XLM unit label and vermilion focus-within treatment.",
+      "html": "<label class=\"ds-field-wrap\"><span class=\"ds-field-label\">Monto en XLM</span><span class=\"ds-amount-shell\"><input type=\"text\" inputmode=\"decimal\" value=\"2.5\" class=\"ds-amount-input\" /><span class=\"ds-amount-unit\">XLM</span></span></label>",
+      "css": ".ds-field-wrap { display: inline-flex; flex-direction: column; gap: 0.3rem; font-family: var(--font-body, 'Archivo', sans-serif); } .ds-field-label { font-size: 0.88rem; font-weight: 700; color: var(--color-ink, #1d1510); } .ds-amount-shell { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 46px; width: 148px; padding: 0 0.85rem; border-radius: 8px; border: 1.5px solid #3c342e; background-color: var(--color-paper-input, #f8f7f4); transition: border-color 180ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-amount-shell:hover { border-color: var(--color-ink, #1d1510); } .ds-amount-shell:focus-within { outline: 2.5px solid var(--color-vermilion, #c73828); outline-offset: 2px; } .ds-amount-input { width: 100%; border: none; background: transparent; color: var(--color-ink, #1d1510); font-family: inherit; font-size: 0.98rem; font-weight: 700; font-variant-numeric: tabular-nums; outline: none; } .ds-amount-unit { font-size: 0.85rem; font-weight: 600; color: var(--color-ink-muted, #594d43); }"
+    },
+    {
+      "name": "Masthead Navigation Bar",
+      "kind": "nav",
+      "description": "Warm stucco cream top bar combining the Barlow Condensed VacaCR wordmark, Archivo section links, and Testnet contract pill.",
+      "html": "<header class=\"ds-masthead\"><a href=\"#top\" class=\"ds-wordmark\">VacaCR</a><nav class=\"ds-nav\" aria-label=\"Principal\"><a href=\"#como-funciona\">Cómo funciona</a><a href=\"#colectas\">Colectas activas (1)</a></nav><span class=\"ds-contract-pill\"><svg width=\"15\" height=\"15\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1\"/><path d=\"M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4\"/></svg><span>CAHS6X…FSHEP · Testnet</span></span></header>",
+      "css": ".ds-masthead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 1.1rem; background-color: var(--color-cream, #f7e9d9); border-bottom: 2px solid var(--color-cobalt-band, #0f4787); font-family: var(--font-body, 'Archivo', sans-serif); color: var(--color-ink, #1d1510); } .ds-wordmark { font-family: var(--font-numeral, 'Barlow Condensed', 'Archivo', sans-serif); font-size: 1.7rem; font-weight: 700; letter-spacing: -0.015em; line-height: 1; color: inherit; text-decoration: none; } .ds-wordmark:focus-visible { outline: 2.5px solid var(--color-vermilion, #c73828); outline-offset: 2px; } .ds-nav { display: flex; gap: 1.15rem; font-size: 0.9rem; font-weight: 500; } .ds-nav a { color: inherit; text-decoration: none; text-underline-offset: 0.22em; } .ds-nav a:hover { text-decoration: underline; } .ds-nav a:focus-visible { outline: 2.5px solid var(--color-vermilion, #c73828); outline-offset: 2px; } .ds-contract-pill { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.7rem; border-radius: 7px; background-color: var(--color-cream-deep, #f2dec7); border: 1.5px solid var(--color-rule, #7e7264); font-size: 0.82rem; font-weight: 600; font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Vaca Ticket Placard",
+      "kind": "card",
+      "refersTo": "card-vaca-ticket",
+      "description": "Double-pinstripe ledger placard presenting Jockey One vaca title, status stamp, and mortar-divided ui-monospace metadata.",
+      "html": "<article class=\"ds-ticket\" tabindex=\"0\"><div class=\"ds-ticket-top\"><div class=\"ds-ticket-heading\"><span class=\"ds-ticket-num\">Vaca #1</span><h3 class=\"ds-ticket-title\">MEJENGA DEL SÁBADO</h3></div><span class=\"ds-stamp-open\">Abierta a aportes</span></div><div class=\"ds-ticket-meta\"><div><span class=\"ds-meta-label\">Recaudado</span><strong>1.00 / 10.00 XLM (10%)</strong></div><div><span class=\"ds-meta-label\">Beneficiario</span><code class=\"ds-mono\">GCJLYYU…UQ5UKS</code></div></div></article>",
+      "css": ".ds-ticket { padding: 1.35rem 1.5rem; border-radius: 16px; background-color: var(--color-ticket-cream, #fbf3e8); color: var(--color-ink, #1d1510); border: 2px solid var(--color-ink, #1d1510); outline: 1.5px solid var(--color-ink, #1d1510); outline-offset: -6px; box-shadow: 0 10px 24px rgba(29, 21, 16, 0.06); font-family: var(--font-body, 'Archivo', sans-serif); font-variant-numeric: tabular-nums; transition: border-color 180ms cubic-bezier(0.16, 1, 0.3, 1), background-color 180ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-ticket:hover { background-color: var(--color-cream, #f7e9d9); border-color: var(--color-cobalt-band, #0f4787); outline-color: var(--color-cobalt-band, #0f4787); } .ds-ticket:focus-visible { outline: 2.5px solid var(--color-vermilion, #c73828); outline-offset: 2px; } .ds-ticket-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.95rem; } .ds-ticket-heading { display: flex; align-items: baseline; gap: 0.65rem; } .ds-ticket-num { font-size: 0.88rem; font-weight: 700; color: var(--color-cobalt-band, #0f4787); } .ds-ticket-title { margin: 0; font-family: var(--font-display, 'Jockey One', sans-serif); font-size: 1.85rem; font-weight: 400; line-height: 1; letter-spacing: 0.015em; text-shadow: 1.5px 2.5px 1px rgba(229, 178, 76, 0.72); } .ds-stamp-open { padding: 0.26rem 0.7rem; border-radius: 999px; background-color: #f7deb0; border: 1.5px solid var(--color-ink, #1d1510); font-size: 0.8rem; font-weight: 700; } .ds-ticket-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding-top: 0.85rem; border-top: 1px solid #cbbba7; font-size: 0.88rem; } .ds-meta-label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--color-ink-muted, #594d43); margin-bottom: 0.2rem; } .ds-mono { font-family: var(--font-mono, ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace); font-size: 0.85em; font-weight: 600; padding: 0.08rem 0.32rem; border-radius: 4px; background-color: rgba(29, 21, 16, 0.07); }"
+    },
+    {
+      "name": "Route Progress Bar (SALIDA → META)",
+      "kind": "custom",
+      "refersTo": "route-progress-rail",
+      "description": "Inward-rimmed cream placard snippet with Barlow Condensed endpoint numerals, Maracuyá gold rail, vermilion pin, and live preview stripe.",
+      "html": "<div class=\"ds-route-card\" tabindex=\"0\" role=\"progressbar\" aria-valuenow=\"35\" aria-valuemin=\"0\" aria-valuemax=\"100\" aria-label=\"Avance de la vaca\"><div class=\"ds-route-endpoints\"><span><strong>SALIDA</strong> <em class=\"ds-num\">0.00</em> XLM</span><span><strong>META</strong> <em class=\"ds-num\">10.00</em> XLM</span></div><div class=\"ds-route-rail\"><div class=\"ds-route-preview\"></div><div class=\"ds-route-fill\"></div><div class=\"ds-route-ghost-pin\"></div><div class=\"ds-route-pin\"></div></div><p class=\"ds-route-caption\">3.50 XLM recaudado (35%) · Pasá el cursor para previsualizar +2.50 XLM</p></div>",
+      "css": ".ds-route-card { padding: 1rem 1.15rem; border-radius: 14px; background-color: var(--color-cream, #f7e9d9); border: 3px solid var(--color-cream, #f7e9d9); box-shadow: inset 0 0 0 3px var(--color-cobalt-band, #0f4787); font-family: var(--font-body, 'Archivo', sans-serif); color: var(--color-ink, #1d1510); font-variant-numeric: tabular-nums; cursor: pointer; } .ds-route-card:focus-visible { outline: 2.5px solid var(--color-vermilion, #c73828); outline-offset: 2px; } .ds-route-endpoints { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.55rem; } .ds-num { font-style: normal; font-family: var(--font-numeral, 'Barlow Condensed', 'Archivo', sans-serif); font-size: 1.55rem; font-weight: 700; line-height: 0.92; letter-spacing: -0.01em; text-shadow: 1.5px 2.5px 1px rgba(229, 178, 76, 0.72); } .ds-route-rail { position: relative; width: 100%; height: 18px; border-radius: 999px; background-color: var(--color-gold-rail, #ebb02d); border: 1.5px solid #593e12; } .ds-route-preview { position: absolute; inset: 0; border-radius: 999px; background: repeating-linear-gradient(-45deg, rgba(199, 56, 40, 0.42) 0 7px, rgba(235, 176, 45, 0.85) 7px 14px); clip-path: inset(0 65% 0 0 round 999px); opacity: 0; transition: clip-path 420ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-route-card:hover .ds-route-preview, .ds-route-card:focus-visible .ds-route-preview { opacity: 1; clip-path: inset(0 40% 0 0 round 999px); } .ds-route-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 35%; border-radius: 999px 0 0 999px; background-color: var(--color-vermilion, #c73828); } .ds-route-pin { position: absolute; left: 35%; top: 50%; transform: translate(-50%, -50%); width: 12px; height: 26px; border-radius: 999px; background-color: var(--color-vermilion, #c73828); border: 1.5px solid #4a150e; } .ds-route-ghost-pin { position: absolute; left: 35%; top: 50%; transform: translate(-50%, -50%) scale(0.85); width: 10px; height: 22px; border-radius: 999px; background-color: var(--color-cream, #f7e9d9); border: 2px solid var(--color-vermilion, #c73828); box-shadow: 0 3px 10px rgba(199, 56, 40, 0.32); opacity: 0; transition: left 420ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms cubic-bezier(0.16, 1, 0.3, 1), transform 240ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-route-card:hover .ds-route-ghost-pin, .ds-route-card:focus-visible .ds-route-ghost-pin { left: 60%; opacity: 1; transform: translate(-50%, -50%) scale(1); } .ds-route-caption { margin: 0.65rem 0 0; font-size: 0.84rem; font-weight: 600; text-align: center; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Rótulo de Ruta y Pulpería",
+    "overview": "VacaCR turns every shared Costa Rican group collection (\"vaca\") into a painted enamel bus-route placard and neighborhood *pulpería* ledger. Instead of hiding smart-contract rules behind dark-mode crypto neon or generic split-column fintech templates, the interface presents on-chain Stellar Soroban custody with the daylight clarity of a hand-lettered destination board: sun-warmed stucco creams, full-bleed buseta cobalt bands, double-pinstripe frames (*filete doble*), and a physical `SALIDA → META` route rail that shows exactly where pooled funds sit and how they unlock.\n\nInformation density is purposeful and transparent. Every screen makes the immutable contract bargain legible in plain Costa Rican Spanish before requesting a wallet signature—showing what is raised, when the deadline closes, and how funds either release 100% to the beneficiary or return via individual `refund()`. Motion follows physical signage mechanics: route markers glide along the track with a crisp ease-out curve (`cubic-bezier(0.16, 1, 0.3, 1)` over `420ms`) to preview typed XLM contributions in real time, while enameled buttons respond with a firm `1px` downward press (`180ms`).",
+    "keyCharacteristics": [
+      "Sun-baked Warm Stucco Cream (`#f7e9d9`) and Buseta Enamel Cobalt (`#0f4787`) architectural bands replacing white-card SaaS layouts and dark crypto dashboards.",
+      "Double-pinstripe enamel framing (*filete doble*) built with inward cream-and-cobalt inset rims on the hero placard and paired `2px` borders plus inset `1.5px–2px` outlines across tickets, manifests, banners, and buttons.",
+      "Strict accent discipline reserving Brick Vermilion (`#c73828`) exclusively for committing XLM (`Aportar XLM`), active route progress, and focus/alert rings.",
+      "Purpose-built four-voice type system pairing condensed sign-painter `Jockey One` titles, smooth oval `Barlow Condensed` route numerals and wordmark, grotesque `Archivo` tabular body copy, and `ui-monospace` on-chain identifiers.",
+      "Interactive `SALIDA → META` route rails that preview projected pool completion with diagonal striped fills before a transaction is signed.",
+      "Plain, jargon-free Costa Rican Spanish paired with one-click Stellar Lab and Stellar Expert verification links."
+    ],
+    "rules": [
+      {
+        "name": "The Vermilion Ticket Rule",
+        "body": "Brick Vermilion (`#c73828`) appears only where XLM moves or advances (`Aportar XLM`, the active route bar fill and pin, error states, and focus rings); wallet connection, navigation, vaca creation, and explorer links always use Enamel Cobalt Action (`#164584`) or outline treatments.",
+        "section": "colors"
+      },
+      {
+        "name": "The Warm Stucco Ground Rule",
+        "body": "Pure `#ffffff` and pure `#000000` never appear as surface backgrounds or typography ink; surfaces step from Warm Stucco Cream (`#f7e9d9`) to Warm Ledger Parchment (`#fbf3e8`) to Chalk Ticket Paper (`#f8f7f4`), anchored by Roasted Coffee Ink (`#1d1510`).",
+        "section": "colors"
+      },
+      {
+        "name": "The Sign-Painter Display & Fare Numeral Rule",
+        "body": "Restrict `Jockey One` to uppercase vaca titles and compact rule stamps, and reserve `Barlow Condensed` for smooth oval `SALIDA` / `META` numerals and the `VacaCR` wordmark; all prose, labels, buttons, and inputs stay in `Archivo`.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Escrow Rule",
+        "body": "Keep `font-variant-numeric: tabular-nums` active across `body`, `button`, and `input` elements, and isolate on-chain addresses and contract calls in `ui-monospace` `<code>` chips so live RPC updates never cause horizontal layout shift.",
+        "section": "typography"
+      },
+      {
+        "name": "The Pinstripe Over Drop-Shadow Rule",
+        "body": "Establish surface boundaries with inward or concentric enamel pinstripes (`border` + `inset` ring or `outline`) and full-bleed cobalt bands—never with heavy dark drop-shadows, `backdrop-filter` glassmorphism, or glowing neon borders.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do frame placards, vaca tickets, manifests, banners, and enamel buttons with the double-pinstripe motif—using inward `#f7e9d9` border + `inset` `#0f4787` shadow on bounded hero placards and `2px solid` border + inset `1.5px–2px` `outline` (`-5px` to `-6px` offset) below the fold.",
+      "Do reserve Brick Vermilion (`#c73828`) exclusively for `Aportar XLM` contribution buttons, the active route fill and pin, validation errors, and `:focus-visible` focus rings.",
+      "Do keep `font-variant-numeric: tabular-nums` enabled on `Archivo` copy and inputs, set `SALIDA` / `META` endpoint numerals and the `VacaCR` wordmark in `Barlow Condensed`, and format Stellar addresses and Soroban calls in `ui-monospace` `<code>` chips.",
+      "Do connect XLM amount inputs to the `SALIDA → META` route preview (`420ms` `cubic-bezier(0.16, 1, 0.3, 1)`) while honoring `prefers-reduced-motion: reduce` by collapsing transitions to `0.01ms`.",
+      "Do state both immutable contract outcomes (`100%` release to beneficiary vs. individual `refund()` after deadline) in plain Costa Rican Spanish alongside direct Stellar Lab and Stellar Expert links before asking for a signature."
+    ],
+    "donts": [
+      "Don't introduce dark-mode crypto surfaces, neon purple/cyan gradients, `backdrop-filter` glassmorphism, or generic multi-card SaaS KPI grids.",
+      "Don't set body paragraphs, form inputs, comparison cells, or error copy in `Jockey One` or `Barlow Condensed`; keep all multi-line prose, labels, and controls in `Archivo`.",
+      "Don't use pure white (`#ffffff`) or pure black (`#000000`) for backgrounds or ink; build every surface from Warm Stucco Cream (`#f7e9d9`), Warm Ledger Parchment (`#fbf3e8`), Chalk Ticket Paper (`#f8f7f4`), and Roasted Coffee Ink (`#1d1510`).",
+      "Don't nest bordered cards inside bordered cards; divide internal sections such as ticket metadata and onboarding stops with `1px solid` warm mortar hairlines (`#cbbba7`).",
+      "Don't add decorative uppercase eyebrow kickers above section headings; let bold `Archivo` headings establish section hierarchy directly."
+    ]
+  }
+}

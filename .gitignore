@@ -2,3 +2,9 @@ target/
 **/*.rs.bk
 .DS_Store
 .stellar/
+
+# Impeccable working material
+.impeccable/build/
+.impeccable/mocks/
+.impeccable/questions/
+.impeccable/review/
